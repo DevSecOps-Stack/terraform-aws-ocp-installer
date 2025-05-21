@@ -99,11 +99,6 @@ resource "aws_key_pair" "jump" {
   public_key = file(var.public_key_path)
 }
 
-resource "aws_iam_instance_profile" "jump" {
-  name = "${var.project}-profile"
-  role = aws_iam_role.jump.name
-}
-
 ########################################
 #           Security Group             #
 ########################################
@@ -213,7 +208,6 @@ resource "aws_instance" "jump" {
   subnet_id                   = data.aws_subnets.default.ids[0]
   vpc_security_group_ids      = [aws_security_group.jump.id]
   key_name                    = aws_key_pair.jump.key_name
-  iam_instance_profile        = aws_iam_instance_profile.jump.name
   user_data                   = local.user_data
   user_data_replace_on_change = true
 
