@@ -99,21 +99,6 @@ resource "aws_key_pair" "jump" {
   public_key = file(var.public_key_path)
 }
 
-resource "aws_iam_role" "jump" {
-  name               = "${var.project}-role"
-  assume_role_policy = data.aws_iam_policy_document.ec2_assume_role.json
-}
-
-resource "aws_iam_role_policy_attachment" "route53" {
-  role       = aws_iam_role.jump.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonRoute53FullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "ssm" {
-  role       = aws_iam_role.jump.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-}
-
 resource "aws_iam_instance_profile" "jump" {
   name = "${var.project}-profile"
   role = aws_iam_role.jump.name
